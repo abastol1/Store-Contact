@@ -10,7 +10,7 @@
 
   <style type="text/css">
 
-  body{
+  html{
     background-image: url("back.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -32,12 +32,12 @@
 
 <body>
 
-  <form>
+  <form action="/mailer" method="POST">
     <!-- Prefix -->
     <div class="form-row ">
       <div class="form-check form-check-inline col-md-1">
         <input class="form-check-input" type="radio"  name="prefix" value="Mr.">
-        <label class="form-check-label" for="inlineCheckbox1">Mr.</label>
+        <label class="form-check-label" for="inlineCheckbox1" checked="checked" >Mr.</label>
       </div>
       <div class="form-check form-check-inline col-md-1">
         <input class="form-check-input" type="radio"  name="prefix" value="Mrs.">
@@ -56,11 +56,11 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputFirstName4">First Name:</label>
-        <input type="text" class="form-control" id="inputFirstName4" placeholder="First Name">
+        <input name="firstName" type="text" class="form-control" id="inputFirstName4" placeholder="First Name">
       </div>
       <div class="form-group col-md-6">
         <label for="inputLastName4">Last Name</label>
-        <input type="text" class="form-control" id="inputLastName4" placeholder="Last Name">
+        <input name="lastName" type="text" class="form-control" id="inputLastName4" placeholder="Last Name">
       </div>
     </div>
 
@@ -133,7 +133,7 @@
         <label class="form-check-label" for="inlineCheckbox2">Email</label>
       </div>
       <div class="form-check form-check-inline col-md-1" >
-        <input class="form-check-input" type="checkbox"  name="any" value="Anuj" checked>
+        <input class="form-check-input" type="checkbox"  name="any" value="Any" checked>
         <label class="form-check-label" for="inlineCheckbox2">Any</label>
       </div>
     </div>

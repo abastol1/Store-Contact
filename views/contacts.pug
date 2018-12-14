@@ -1,0 +1,168 @@
+doctype html
+html(lang='en')
+  head
+    // Required meta tags
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    
+    // Bootstrap CSS
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+
+    // Map Box script and css
+    script(src='https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js')
+    link(href='https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css', rel='stylesheet')
+    script(src="geocoding.js")    
+    style(type='text/css').
+      body{
+        background-image: url("back.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        padding-top:78px;
+      }
+      #updateForm{
+        margin:auto;
+        width: 50%;
+        margin-top: 10%;
+        border: 4px solid red;
+        border-radius: 20px;
+        padding: 40px;
+        background-color: #f5f5f0;
+      }
+
+    link(rel='stylesheet', type='text/css', href='/contactStyle.css')
+    title Contact Info
+  body
+    nav.navbar.navbar-light.bg-light.justify-content-between.fixed-top
+      a.navbar-brand(href='/index.html')
+        img.d-inline-block.align-top(src='newcontact.png', width='50', height='50', alt='') 
+        span(style="font-size: 31px")   Add Contact
+      form.form-inline
+        input#searchTable.form-control.mr-sm-2(type='search', placeholder='Search In Table', aria-label='Search')
+
+    //- nav.navbar.navbar-light.bg-light.fixed-top
+    //-   a.navbar-brand(href='/index.html')
+    //-     img.d-inline-block.align-top(src='newcontact.png', width='50', height='50', alt='') 
+    //-     span(style="font-size: 31px")   Add Contact
+    //-   input#searchTable.form-control.mr-sm-2(type='search', placeholder='Search by Name', aria-label='Search')
+          
+    #container.card
+
+      .row.card-header
+        .col 
+          h1 List of Contacts
+        .col
+          //- a(href='/index.html'): button Create New Contact
+      .row
+        // div for contact info
+        .col
+            table.table.table-hover.clickable.table-dark
+              thead
+                tr
+                  th(scope='col') Name
+                  th(scope='col') Address
+                  th(scope='col') Phone
+                  th(scope='col') Email
+                  th(scope='col') Contact By Mail
+                  th(scope='col') Contact By Phone
+                  th(scope='col') Contact By Email
+                  th(scope='col') Update
+                  th(scope='col') Delete
+              tbody#tableBody
+                  each obj in data
+                    -const prefix = obj.prefix
+                    -const fullName = obj.firstName + " " + obj.lastName
+                    -const fullAddress = obj.street + " " + obj.city + " " + obj.state + " " + obj.zip
+                    -const email = obj.email
+                    -const phone = obj.phone
+                    -const id = obj.id
+                    tr.clickable-row(data-prefix=prefix, data-name=fullName, data-address=fullAddress, data-lat= obj.lat, data-lng=obj.lng, data-phone=phone, data-email=email, data-id=id)
+
+                      th(scope='row') #{obj.prefix} #{obj.firstName} #{obj.lastName}
+                      td #{obj.street} #{obj.city} #{obj.state} #{obj.zip}
+                      td #{obj.phone}
+                      td #{obj.email}
+                      td #{obj.contactByMail}
+                      td #{obj.contactByPhone}
+                      td #{obj.contactByEmail}
+                      td: button#updateButton.btn.btn-warning(type='button', data-id=obj.id, data-prefix=obj.prefix, data-firstName=obj.firstName, data-lastName=obj.lastName, data-street=obj.street, data-city=obj.city, data-state=obj.state, data-zip=obj.zip, data-email=obj.email, data-phone=obj.phone) Update
+                      td: button#deleteButton.btn.btn-danger(type='button', data-id=obj.id) Delete
+      .row
+        // Div for map
+    #map  
+    
+    form#updateForm(method="POST" action="/update")
+      .form-row
+        .form-check.form-check-inline.col-md-1
+          input.form-check-input(type='radio', name='prefix', value='Mr.', id="radio1")
+          label.form-check-label(for='inlineCheckbox1', checked='checked') Mr.
+        .form-check.form-check-inline.col-md-1
+          input.form-check-input(type='radio', name='prefix', value='Mrs.', id="radio2")
+          label.form-check-label(for='inlineCheckbox2') Mrs.
+        .form-check.form-check-inline.col-md-1
+          input.form-check-input(type='radio', name='prefix', value='Ms.', id="radio3")
+          label.form-check-label(for='inlineCheckbox2') Ms.
+        .form-check.form-check-inline.col-md-1
+          input.form-check-input(type='radio', name='prefix', value='Dr.', id="radio4")
+          label.form-check-label(for='inlineCheckbox2') Dr.
+      .form-row
+        .form-group.col-md-6
+          label(for='inputFirstName4') First Name:
+          input#inputFirstName4.form-control( name='firstName', type='text', placeholder='First Name')
+        .form-group.col-md-6
+          label(for='inputLastName4') Last Name
+          input#inputLastName4.form-control(name='lastName', type='text', placeholder='Last Name')
+      .form-row
+        .form-group.col-md-5
+          label(for='inputAddress') Street
+          input#inputAddress.form-control(type='text', name='street', placeholder='Street')
+        .form-group.col-md-4
+          label(for='inputAddress2') City
+          input#inputAddress2.form-control(type='text', name='city', placeholder='City')
+        .form-group.col-md-3
+          label(for='inputState') State
+          select#inputState.form-control(name='state')
+            option(selected='') Choose...
+            option(value='CT') CT
+            option(value='NJ') NJ
+            option(value='NY') NY
+            option(value='PA') PA
+      .form-row
+        .form-group.col-md-6
+          label(for='inputZip') Zip
+          input#inputZip.form-control(type='text', name='zip', placeholder='Zip')
+        .form-group.col-md-6
+          label(for='phoneNum') Contact Number
+          input#inputPhone.form-control(type='text', name='phoneNum', placeholder='Phone')
+
+      // Email
+      .form-row
+        .form-group.col-md-6
+          label(for='email') Email
+          input#inputEmail.form-control(type='email', name='emailAdd', placeholder='Email')
+      // Prefix
+      .form-row
+        span.col-md-4 How may we contact you?
+        .form-check.form-check-inline.col-md-2
+          input.form-check-input(type='checkbox', name='phone', value='Phone')
+          label.form-check-label(for='inlineCheckbox1') Phone
+        .form-check.form-check-inline.col-md-2
+          input.form-check-input(type='checkbox', name='mail', value='Mail')
+          label.form-check-label(for='inlineCheckbox2') Mail
+        .form-check.form-check-inline.col-md-2
+          input.form-check-input(type='checkbox', name='email', value='Email')
+          label.form-check-label(for='inlineCheckbox2') Email
+        .form-check.form-check-inline.col-md-1
+          input.form-check-input(type='checkbox', name='any', value='Any', checked='')
+          label.form-check-label(for='inlineCheckbox2') Any
+          input#custId(type='hidden', name='custId')
+
+      br
+      button#saveButton.btn.btn-primary() Save  
+
+    // Optional JavaScript
+    // jQuery first, then Popper.js, then Bootstrap JS
+    //- script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js', integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl', crossorigin='anonymous')
