@@ -51,7 +51,7 @@ $(document).ready(function () {
         var email = $(this).data("email");
         console.log("Name is " + name);
         console.log("Prefix is " + prefix)
-        if(typeof prefix == "undefined"){
+        if (typeof prefix == "undefined") {
             console.log("UNDEFINED PREFIX")
             // DO not add prefix to name
         }
@@ -113,16 +113,16 @@ $(document).ready(function () {
         $("#inputZip").val(zip);
         $("#inputPhone").val(phone);
         $("#inputEmail").val(email);
-        
+
     })
 
     $(".clickable-row").on("click", "#deleteButton", function () {
         console.log("Inside Delete button");
         var id = { contactId: $(this).data('id') };
         console.log("Delete id is " + id);
-
         $(this).parent().parent().remove();
-        
+
+
         $.ajax({
             type: 'POST',
             data: JSON.stringify(id),
@@ -137,13 +137,13 @@ $(document).ready(function () {
         });
     });
 
-    $("#searchTable").on("keyup", function() {
+    $("#searchTable").on("keyup", function () {
         console.log("Inside filter");
         var value = $(this).val().toLowerCase();
-        $("#tableBody tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $("#tableBody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
-      });
+    });
 });
 
 
