@@ -2,7 +2,15 @@ doctype html
 html
   head
     title Login Failed
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css', integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm', crossorigin='anonymous')
+    link(rel='stylesheet', type='text/css', href='/Stylesheets/loginstyle.css')
   body
-    p
-      | Your login failed! 
-      a(href='login') Why don't you try harder
+  .container
+      .card.card-container
+        img#profile-img.profile-img-card(src='//ssl.gstatic.com/accounts/ui/avatar_2x.png')
+        p#profile-name.profile-name-card
+          p.text-center
+            | Your Login Failed!
+        a.btn.btn-primary(href='login', role='button') Click Here to Login In
+
+

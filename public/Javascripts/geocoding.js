@@ -1,3 +1,4 @@
+let globalMarker = {};
 
 $(document).ready(function () {
     console.log("I am inside Geocoding.js");
@@ -26,18 +27,7 @@ $(document).ready(function () {
     // -------------------------------------------------------------------------------------------------------------------------------
     // adding marker 
 
-    $('table > tbody > tr').each(function () {
-        console.log("--------------------------------------");
-        var lat = $(this).data("lat");
-        var lng = $(this).data("lng");
-
-        console.log("Lat is " + lat);
-        console.log("Lng is " + lng);
-
-        var marker = new mapboxgl.Marker()
-            .setLngLat([lng, lat])
-            .addTo(map);
-    });
+    addMarkers();
 
     // -------------------------------------------------------------------------------------------------------------------------------
     // When user clicks on any row in the table, this function is called to center the map to that particular location
@@ -89,7 +79,7 @@ $(document).ready(function () {
         var phone = $(this).data("phone");
         console.log("id is " + $(this).data("id"));
         if (prefix == "Mr.") {
-            console.log("Inside mr.");
+            // console.log("Inside mr.");
             $("#radio1").prop("checked", true);
         }
         else if (prefix == "Mrs.") {
@@ -117,12 +107,22 @@ $(document).ready(function () {
     })
 
     $(".clickable-row").on("click", "#deleteButton", function () {
-        console.log("Inside Delete button");
+        // console.log("Inside Delete button");
         var id = { contactId: $(this).data('id') };
-        console.log("Delete id is " + id);
+        // console.log("Delete id is " + id);
+        var lat = $(this).parent().parent().data('lat');
+        var lng = $(this).parent().parent().data('lng');
+        // console.log("Lat is ======== " + lat);
+        // console.log("Lng is ======== " + lng);
+
         $(this).parent().parent().remove();
 
-
+        var email = $(this).parent().parent().data('email');
+        console.log("Email is " + email);
+        let markerTodelete = globalMarker[email];
+        console.log("to delete");
+        console.log(markerTodelete);
+        markerTodelete.remove();
         $.ajax({
             type: 'POST',
             data: JSON.stringify(id),
@@ -130,6 +130,7 @@ $(document).ready(function () {
             url: 'http://localhost:3000/delete',
             success: function (data) {
                 alert("Contact Deleted ");
+
             },
             error: function (err) {
                 alert("ERROR!")
@@ -138,13 +139,32 @@ $(document).ready(function () {
     });
 
     $("#searchTable").on("keyup", function () {
-        console.log("Inside filter");
         var value = $(this).val().toLowerCase();
         $("#tableBody tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+
+    function addMarkers() {
+        $('table > tbody > tr').each(function () {
+            console.log("--------------------------------------");
+            var lat = $(this).data("lat");
+            var lng = $(this).data("lng");
+    
+            console.log("Lat is " + lat);
+            console.log("Lng is " + lng);
+    
+            var marker = new mapboxgl.Marker()
+                .setLngLat([lng, lat])
+                .addTo(map);
+            const email = $(this).data('email');
+            console.log("Email is " + email);
+            globalMarker[email] = marker;
+            console.log(globalMarker);
+        });
+    }
 });
+
 
 
 

@@ -13,11 +13,11 @@ body, html {
     background-color: #f2f2f2;
   }
 
-  #map{
+  #thankyoudiv{
     /* height: 400px; */
     height: auto;
     border-right: 4px solid red;
-    background-image: url("thank_you.png");
+    background-image: url("../images/thank_you.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     max-width: 100%;

@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 
 app.set('view engine', 'pug');
-app.use(express.static('views'));
+app.use(express.static('public'));
 
 
 var Contact = mongoose.model('Contact', {
@@ -140,7 +140,11 @@ app.get('/logout', function (req, res) {
 });
 
 app.get('/mailer', function (req, res) {
-    res.sendFile(__dirname + '/views/index.html');
+    res.sendFile(__dirname + "/public/index.html");
+})
+
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + "/public/index.html");
 })
 
 app.post('/mailer', urlencodedParser, (req, res) => {
@@ -161,7 +165,7 @@ app.post('/mailer', urlencodedParser, (req, res) => {
     if (isPhone == "Yes") {
         isPhone = req.body.phoneNum;
     }
-    const addressToGeoCode = req.body.street + ", " + req.body.city + ", " + req.body.state + " " + req.body.zip;
+    const addressToGeoCode = req.body.street + " " + req.body.city + " " + req.body.state + " " + req.body.zip;
     console.log("Address to geocode is " + addressToGeoCode);
 
     geo.geocode('mapbox.places', addressToGeoCode, function (err, geoData) {
@@ -209,7 +213,7 @@ app.post('/mailer', urlencodedParser, (req, res) => {
 
         console.log("The document is " + JSON.stringify(document));
         Contact.insertMany(document);
-        res.render('mapPage/mapContactPage.pug', { toSend: toSend });
+        res.render('mapContactPage.pug', { toSend: toSend });
 
     });
 })
@@ -224,7 +228,7 @@ app.get("/contacts" , ensureLoggedIn, (req, res) => {
 })
 
 
-app.post('/update', ensureLoggedIn, function (req, res) {
+app.post('/contacts', ensureLoggedIn, function (req, res) {
     var newData = req.body;
     console.log("New Data is " + JSON.stringify(newData));
     var fullAddress = newData.street + " " + newData.city + " " + newData.state + " " + newData.zip;
